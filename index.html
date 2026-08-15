@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Th-FDrums Player — Seja um testador</title>
+<meta name="description" content="Ajude a testar o Th-FDrums Player, o módulo de som pra bateria eletrônica no seu celular, antes do lançamento oficial na Play Store.">
+<link rel="icon" type="image/png" href="icone_512.png">
+<style>
+  :root {
+    --bg: #0c0c0e;
+    --panel: #17171a;
+    --panel-2: #1f2024;
+    --text: #f2f2f0;
+    --text-muted: #a7a7ac;
+    --accent: #ff8a1e;
+    --accent-2: #ffb066;
+    --border: #2a2a2f;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+  }
+  img { max-width: 100%; display: block; }
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  header.top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  header.top img {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+  header.top span {
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.2px;
+  }
+  .hero {
+    padding: 40px 24px 60px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 4.5vw, 2.9rem);
+    margin: 0 0 16px;
+    line-height: 1.15;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero p.lead {
+    max-width: 620px;
+    margin: 0 auto 28px;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #17110a;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 999px;
+    text-decoration: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .btn:hover { background: var(--accent-2); transform: translateY(-1px); }
+
+  section {
+    padding: 56px 0;
+    border-top: 1px solid var(--border);
+  }
+  section h2 {
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    margin: 0 0 8px;
+    text-align: center;
+  }
+  section p.section-lead {
+    text-align: center;
+    color: var(--text-muted);
+    max-width: 640px;
+    margin: 0 auto 36px;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+  }
+  .feature {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+  }
+  .feature .icon {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+  .feature h3 {
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+  }
+  .feature p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+  }
+  .gallery figure {
+    margin: 0;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .gallery img {
+    width: 100%;
+    display: block;
+  }
+  .gallery figcaption {
+    padding: 12px 14px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    counter-reset: step;
+  }
+  .step {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    position: relative;
+  }
+  .step::before {
+    counter-increment: step;
+    content: counter(step);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #17110a;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .step h3 { margin: 0 0 8px; font-size: 1.02rem; }
+  .step p { margin: 0; color: var(--text-muted); font-size: 0.93rem; }
+
+  .signup {
+    background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 42px 28px;
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .signup h2 { margin-top: 0; }
+  form#testerForm {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 24px;
+  }
+  form#testerForm input[type="email"] {
+    flex: 1 1 260px;
+    padding: 14px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #0f0f11;
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+  }
+  form#testerForm input[type="email"]:focus {
+    border-color: var(--accent);
+  }
+  form#testerForm button {
+    flex: 0 0 auto;
+  }
+  p.fine-print {
+    margin-top: 16px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  p.fine-print a { color: var(--accent-2); }
+
+  #thanksMsg {
+    display: none;
+    padding: 20px;
+    background: #17240f;
+    border: 1px solid #2f4a1d;
+    border-radius: 14px;
+    color: #c9f0a8;
+    margin-top: 24px;
+    font-weight: 600;
+  }
+  #errorMsg {
+    display: none;
+    padding: 14px 18px;
+    background: #2a1414;
+    border: 1px solid #4a1d1d;
+    border-radius: 14px;
+    color: #f0a8a8;
+    margin-top: 16px;
+    font-size: 0.9rem;
+  }
+
+  footer {
+    padding: 32px 24px 48px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+  footer a { color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <img src="icone_512.png" alt="Th-FDrums Player">
+  <span>Th-FDrums Player</span>
+</header>
+
+<section class="hero" style="border-top:none; padding-top:10px;">
+  <div class="container">
+    <h1>Ajude a testar o <span class="accent">Th-FDrums Player</span><br>antes do lançamento</h1>
+    <p class="lead">
+      Transformamos o celular num módulo de som pra bateria eletrônica — engine de áudio nativo
+      de baixíssima latência, importação de kits, gravação de peças pelo microfone e mixer
+      profissional por peça. Estamos chamando um grupo pequeno de testadores pra experimentar
+      antes de todo mundo e ajudar a deixar o app redondo pro lançamento.
+    </p>
+    <a href="#cadastro" class="btn">Quero ser testador</a>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>O que o app faz</h2>
+    <p class="section-lead">
+      Conecte seu módulo de bateria eletrônica ou controlador MIDI (USB ou Bluetooth) e toque —
+      sem anúncio, sem conta, 100% offline.
+    </p>
+    <div class="features">
+      <div class="feature">
+        <div class="icon">🥁</div>
+        <h3>Áudio de baixíssima latência</h3>
+        <p>Engine nativo em C++ com Oboe, modo exclusivo de saída, sem passar pelo mixer do sistema.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🎙️</div>
+        <h3>Grave peças pelo microfone</h3>
+        <p>Gostou do som de uma bateria acústica em algum lugar? Grave a peça na hora e importe pro app.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🗺️</div>
+        <h3>Mapeamento MIDI flexível</h3>
+        <p>Troque peças entre kits, adicione peças novas em notas livres e configure o pedal do chimbal.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🎚️</div>
+        <h3>Mixer profissional</h3>
+        <p>Canal individual por peça, EQ de 6 bandas, compressor, noise gate e reverb.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🎵</div>
+        <h3>Faixa de música + gravação</h3>
+        <p>Toque uma faixa MP3/WAV junto com a bateria e grave a mixagem final.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📱</div>
+        <h3>Celular ou tablet</h3>
+        <p>Interface adaptada pra telas grandes, além do modo retrato no celular.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Um pouco da tela do app</h2>
+    <p class="section-lead">Capturas reais do aplicativo, direto do aparelho de testes.</p>
+    <div class="gallery">
+      <figure>
+        <img src="screenshots/screenshot_1_inicio.png" alt="Tela inicial do app com os pads de teste" loading="lazy">
+        <figcaption>Início — pads de teste e status do MIDI</figcaption>
+      </figure>
+      <figure>
+        <img src="screenshots/screenshot_2_mapa.png" alt="Tela de mapeamento de notas MIDI" loading="lazy">
+        <figcaption>Mapa — notas MIDI por peça do kit</figcaption>
+      </figure>
+      <figure>
+        <img src="screenshots/screenshot_7_adicionar_peca.png" alt="Adicionando uma peça nova ao kit" loading="lazy">
+        <figcaption>Adicione peças novas em notas livres</figcaption>
+      </figure>
+      <figure>
+        <img src="screenshots/screenshot_3_mixer.png" alt="Tela do mixer com canais por peça" loading="lazy">
+        <figcaption>Mixer — canal individual por peça</figcaption>
+      </figure>
+      <figure>
+        <img src="screenshots/screenshot_6_gravar_peca.png" alt="Gravando uma peça pelo microfone" loading="lazy">
+        <figcaption>Grave uma peça na hora, pelo microfone</figcaption>
+      </figure>
+      <figure>
+        <img src="screenshots/screenshot_4_musica.png" alt="Tela de música com faixa MP3 tocando junto" loading="lazy">
+        <figcaption>Música — toque uma faixa junto com a bateria</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Como funciona o teste</h2>
+    <p class="section-lead">É rápido, sem compromisso, e sua opinião molda o lançamento.</p>
+    <div class="steps">
+      <div class="step">
+        <h3>Deixe seu e-mail</h3>
+        <p>Cadastre-se aqui embaixo. Nada de spam — usamos seu e-mail só pra isso.</p>
+      </div>
+      <div class="step">
+        <h3>Receba o convite</h3>
+        <p>Assim que abrirmos a faixa de teste no Google Play, você recebe o link de acesso.</p>
+      </div>
+      <div class="step">
+        <h3>Instale e toque</h3>
+        <p>Conecte seu módulo/controlador MIDI e use o app normalmente, do seu jeito.</p>
+      </div>
+      <div class="step">
+        <h3>Manda seu feedback</h3>
+        <p>Conte o que funcionou, o que travou e o que sentiu falta — isso vai direto pro próximo ajuste.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cadastro">
+  <div class="container">
+    <div class="signup">
+      <h2>Quero ser testador</h2>
+      <p style="color:var(--text-muted); margin-top:0;">Deixa seu melhor e-mail aqui embaixo.</p>
+
+      <form id="testerForm"
+            action="https://script.google.com/macros/s/AKfycbzJEAAJczIqgMF3pmueKBVtDpMHanfjzHBdxSVrgRKdN07LYtTpwH8qaNyh-tKnx9Gr/exec"
+            method="POST"
+            target="hidden_iframe">
+        <input type="email" name="email" id="emailInput" placeholder="seu@email.com" required>
+        <input type="hidden" name="source" value="landing-thfdrums-testers">
+        <input type="hidden" name="timestamp" id="timestampInput" value="">
+        <button type="submit" class="btn">Quero testar</button>
+      </form>
+
+      <div id="thanksMsg">✓ Recebemos seu e-mail! Assim que a faixa de teste abrir, mandamos o convite pra você.</div>
+      <div id="errorMsg">Não deu pra confirmar o envio agora — se o problema continuar, tenta de novo em alguns minutos.</div>
+
+      <p class="fine-print">
+        Seu e-mail é usado só pra avisar sobre o teste do app, nada de spam.
+        Veja nossa <a href="https://thigonf37.github.io/thfdrums-privacy-policy/" target="_blank" rel="noopener">política de privacidade</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+<footer>
+  <p>Th-FDrums Player — app pra bateria eletrônica.</p>
+  <p><a href="https://thigonf37.github.io/thfdrums-privacy-policy/" target="_blank" rel="noopener">Política de privacidade</a></p>
+</footer>
+
+<script>
+  (function () {
+    var form = document.getElementById('testerForm');
+    var iframe = document.getElementById('hidden_iframe');
+    var thanks = document.getElementById('thanksMsg');
+    var errorMsg = document.getElementById('errorMsg');
+    var timestampInput = document.getElementById('timestampInput');
+    var submitted = false;
+    var timeoutId = null;
+
+    iframe.addEventListener('load', function () {
+      if (!submitted) return;
+      clearTimeout(timeoutId);
+      form.style.display = 'none';
+      errorMsg.style.display = 'none';
+      thanks.style.display = 'block';
+    });
+
+    form.addEventListener('submit', function () {
+      submitted = true;
+      timestampInput.value = new Date().toISOString();
+      timeoutId = setTimeout(function () {
+        if (thanks.style.display !== 'block') {
+          errorMsg.style.display = 'block';
+        }
+      }, 8000);
+    });
+  })();
+</script>
+
+</body>
+</html>
