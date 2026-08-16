@@ -225,6 +225,16 @@
     margin-top: 24px;
     font-weight: 600;
   }
+  #soldOutMsg {
+    display: none;
+    padding: 20px;
+    background: #241a0f;
+    border: 1px solid #4a341d;
+    border-radius: 14px;
+    color: #f0d0a8;
+    margin-top: 24px;
+    font-weight: 600;
+  }
   #errorMsg {
     display: none;
     padding: 14px 18px;
@@ -377,6 +387,7 @@
       </form>
 
       <div id="thanksMsg">✓ Recebemos seu e-mail! Assim que a faixa de teste abrir, mandamos o convite pra você.</div>
+      <div id="soldOutMsg">As vagas de testador já se esgotaram — obrigado pelo interesse! Fica de olho, o lançamento oficial não deve demorar.</div>
       <div id="errorMsg">Não deu pra confirmar o envio agora — se o problema continuar, tenta de novo em alguns minutos.</div>
 
       <p class="fine-print">
@@ -399,6 +410,7 @@
     var emailInput = document.getElementById('emailInput');
     var submitBtn = document.getElementById('submitBtn');
     var thanks = document.getElementById('thanksMsg');
+    var soldOut = document.getElementById('soldOutMsg');
     var errorMsg = document.getElementById('errorMsg');
 
     form.addEventListener('submit', function (ev) {
@@ -423,6 +435,9 @@
           if (data && data.ok) {
             form.style.display = 'none';
             thanks.style.display = 'block';
+          } else if (data && data.limitReached) {
+            form.style.display = 'none';
+            soldOut.style.display = 'block';
           } else {
             throw new Error((data && data.error) || 'Falha desconhecida');
           }
