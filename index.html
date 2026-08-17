@@ -379,10 +379,14 @@
   <div class="container">
     <div class="signup">
       <h2>Quero ser testador</h2>
-      <p style="color:var(--text-muted); margin-top:0;">Deixa seu melhor e-mail aqui embaixo.</p>
+      <p style="color:var(--text-muted); margin-top:0;">
+        Deixa seu e-mail do Gmail aqui embaixo — por enquanto só aceitamos
+        <strong>@gmail.com</strong> (é o e-mail que o convite de teste do
+        Google Play usa pra te reconhecer).
+      </p>
 
       <form id="testerForm">
-        <input type="email" name="email" id="emailInput" placeholder="seu@email.com" required>
+        <input type="email" name="email" id="emailInput" placeholder="seuemail@gmail.com" required>
         <button type="submit" class="btn" id="submitBtn">Quero testar</button>
       </form>
 
@@ -412,10 +416,24 @@
     var thanks = document.getElementById('thanksMsg');
     var soldOut = document.getElementById('soldOutMsg');
     var errorMsg = document.getElementById('errorMsg');
+    var defaultErrorText = errorMsg.textContent;
+    // só @gmail.com/@googlemail.com — o convite de teste no Google Play só
+    // funciona com conta Google, então e-mail de outro provedor (Yahoo,
+    // Hotmail etc.) nunca ia conseguir aceitar o convite mesmo assim.
+    var GMAIL_REGEX = /^[^\s@]+@(gmail\.com|googlemail\.com)$/i;
 
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
       errorMsg.style.display = 'none';
+      errorMsg.textContent = defaultErrorText;
+
+      var email = emailInput.value.trim();
+      if (!GMAIL_REGEX.test(email)) {
+        errorMsg.textContent = 'Por enquanto só aceitamos e-mail do Gmail (@gmail.com) — é o e-mail que o convite de teste do Google Play exige. Cadastra com sua conta Google, por favor.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
       submitBtn.disabled = true;
       submitBtn.textContent = 'Enviando…';
 
@@ -425,7 +443,7 @@
         // o corpo como texto e faz o JSON.parse normalmente.
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
-          email: emailInput.value,
+          email: email,
           source: 'landing-thfdrums-testers',
           timestamp: new Date().toISOString()
         })
