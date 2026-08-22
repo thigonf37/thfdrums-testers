@@ -253,6 +253,54 @@
     font-size: 0.85rem;
   }
   footer a { color: var(--text-muted); }
+
+  .wa-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+  }
+  .wa-overlay.show { display: flex; }
+  .wa-modal {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 34px 28px 28px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+  }
+  .wa-modal .wa-close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 6px;
+  }
+  .wa-modal .wa-icon { font-size: 2.4rem; margin-bottom: 10px; }
+  .wa-modal h3 { margin: 0 0 10px; font-size: 1.2rem; }
+  .wa-modal p { margin: 0 0 22px; color: var(--text-muted); font-size: 0.95rem; }
+  .wa-modal .btn { width: 100%; }
+  .wa-modal .wa-skip {
+    display: block;
+    margin: 14px auto 0;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -407,9 +455,24 @@
   <p><a href="https://thigonf37.github.io/thfdrums-privacy-policy/" target="_blank" rel="noopener">Política de privacidade</a></p>
 </footer>
 
+<!-- Popup do grupo do WhatsApp — só abre depois que o cadastro de e-mail é
+     confirmado de verdade pelo backend (ver data.ok no script abaixo), nunca
+     no clique do formulário em si. -->
+<div class="wa-overlay" id="waOverlay">
+  <div class="wa-modal">
+    <button class="wa-close" id="waClose" aria-label="Fechar">✕</button>
+    <div class="wa-icon">✅</div>
+    <h3>Cadastro confirmado!</h3>
+    <p>Entra no grupo do WhatsApp dos testadores pra ficar por dentro de tudo, tirar dúvidas e mandar seu feedback direto.</p>
+    <a href="#" target="_blank" rel="noopener" class="btn" id="waJoinBtn">Entrar no grupo do WhatsApp</a>
+    <button class="wa-skip" id="waSkip">Agora não</button>
+  </div>
+</div>
+
 <script>
   (function () {
     var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZ_yWERP5IAL2ExK1xW09axpCR3HGuxQpfZ6XwLrDV1rOMQG11vn-sg5-SoEre3BmV/exec";
+    var WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/Lrdzmy1y2Pd9VFwsJYrvtU?s=cl&p=a&mlu=4";
     var form = document.getElementById('testerForm');
     var emailInput = document.getElementById('emailInput');
     var submitBtn = document.getElementById('submitBtn');
@@ -417,6 +480,26 @@
     var soldOut = document.getElementById('soldOutMsg');
     var errorMsg = document.getElementById('errorMsg');
     var defaultErrorText = errorMsg.textContent;
+    var waOverlay = document.getElementById('waOverlay');
+    var waJoinBtn = document.getElementById('waJoinBtn');
+    var waClose = document.getElementById('waClose');
+    var waSkip = document.getElementById('waSkip');
+
+    function showWhatsAppPopup() {
+      waJoinBtn.href = WHATSAPP_GROUP_LINK;
+      waOverlay.classList.add('show');
+    }
+    function hideWhatsAppPopup() {
+      waOverlay.classList.remove('show');
+    }
+    waClose.addEventListener('click', hideWhatsAppPopup);
+    waSkip.addEventListener('click', hideWhatsAppPopup);
+    waOverlay.addEventListener('click', function (ev) {
+      if (ev.target === waOverlay) hideWhatsAppPopup();
+    });
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape') hideWhatsAppPopup();
+    });
     // só @gmail.com/@googlemail.com — o convite de teste no Google Play só
     // funciona com conta Google, então e-mail de outro provedor (Yahoo,
     // Hotmail etc.) nunca ia conseguir aceitar o convite mesmo assim.
@@ -453,6 +536,7 @@
           if (data && data.ok) {
             form.style.display = 'none';
             thanks.style.display = 'block';
+            showWhatsAppPopup();
           } else if (data && data.limitReached) {
             form.style.display = 'none';
             soldOut.style.display = 'block';
